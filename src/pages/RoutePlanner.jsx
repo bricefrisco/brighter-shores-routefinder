@@ -30,6 +30,19 @@ const formatTime = (input) => {
 const RoutePlanner = () => {
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState({});
+  const [completedActions, setCompletedActions] = useState(new Set());
+
+  const toggleActionCompletion = (index) => {
+    setCompletedActions(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(index)) {
+        newSet.delete(index);
+      } else {
+        newSet.add(index);
+      }
+      return newSet;
+    });
+  };
 
   const { selectedBounties: bounties } = useBounties("bountiesV2");
   const { selectedBounties: availableBounties } = useBounties(
@@ -165,7 +178,7 @@ const RoutePlanner = () => {
   }, [bounties, availableBounties, result]);
 
   return (
-    <Page title="Bounty Plan" meta="The best route based on your selections.">
+    <Page title="Bounty Plan" meta="The best route based on your selections. (Click on an action to mark it as completed)">
       {!bounties.length && !availableBounties.length ? (
         <div>
           <Paragraph>
@@ -226,21 +239,31 @@ const RoutePlanner = () => {
               </tr>
             </thead>
             <tbody>
-              {result.actions.map((action, index) => (
-                <tr
-                  key={index}
-                  className="border-b border-gray-100 dark:border-zinc-700 last:border-none dark:text-zinc-200"
-                >
-                  <td className="py-3 capitalize">{action.type}</td>
-                  <td className="py-3">
-                    {action.item ? <Bounty bountyKey={action.item} /> : "-"}
-                  </td>
-                  <td className="py-3 text-right">{action.location}</td>
-                  <td className="py-3 text-right">
-                    {formatTime(Math.round(action.distance))}
-                  </td>
-                </tr>
-              ))}
+              {result.actions.map((action, index) => {
+                const isCompleted = completedActions.has(index);
+                return (
+                  <tr
+                    key={index}
+                    onClick={() => toggleActionCompletion(index)}
+                    className={`border-b border-gray-100 dark:border-zinc-700 last:border-none dark:text-zinc-200 cursor-pointer transition-all duration-200 hover:bg-gray-50 dark:hover:bg-zinc-800 ${
+                      isCompleted 
+                        ? 'bg-gray-100 dark:bg-zinc-800 opacity-60' 
+                        : ''
+                    }`}
+                  >
+                    <td className="py-3 capitalize flex items-center gap-2">
+                      {action.type}
+                    </td>
+                    <td className="py-3">
+                      {action.item ? <Bounty bountyKey={action.item} /> : "-"}
+                    </td>
+                    <td className="py-3 text-right">{action.location}</td>
+                    <td className="py-3 text-right">
+                      {formatTime(Math.round(action.distance))}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
