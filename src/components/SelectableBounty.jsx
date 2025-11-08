@@ -60,16 +60,26 @@ const SelectableBounty = ({
     return null;
   }
 
+  const handleBountyClick = (e) => {
+    if (e.type === "click") {
+      if (count === 0 || !canSelectMoreThanOne) {
+        setCount(bountyKey, 1);
+      } else {
+        setCount(bountyKey, count + 1);
+      }
+    } else if (e.type === "contextmenu") {
+      e.preventDefault();
+      if (count > 0) {
+        setCount(bountyKey, count - 1);
+      }
+    }
+  };
+
   return (
     <div
       className={`cursor-pointer group relative w-full min-h-[60px] border dark:border-zinc-700 dark:text-zinc-200 p-2 rounded block hover:text-blue-500 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-zinc-800 select-none`}
-      onClick={() => {
-        if (count === 0) {
-          setCount(bountyKey, 1);
-        } else {
-          setCount(bountyKey, 0);
-        }
-      }}
+      onClick={handleBountyClick}
+      onContextMenu={handleBountyClick}
     >
       <div className="flex items-center h-full text-right">
         <img

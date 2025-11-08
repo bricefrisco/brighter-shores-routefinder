@@ -33,15 +33,13 @@ const SelectBounties = () => {
     >
       <Subheading>Your bounties</Subheading>
       <Paragraph className="mb-2 dark:text-zinc-300">
-        Select bounties you currently have{" "}
-        <span className="font-bold">(up to 6 total).</span> To see or hide
-        relevant bounties, change your merchanting level on the{" "}
-        <InternalLink to="/configuration">configuration page</InternalLink>. Not
-        all bounties have been discovered yet, so higher level ones may be
-        missing. Please help contribute by providing details about these
-        bounties in our{" "}
-        <ExternalLink to="https://discord.gg/fcSYv9GPwJ">Discord</ExternalLink>,
-        and we will get them added.
+        Select bounties you currently have <span className="font-bold">(up to 6 total).</span> To see or hide relevant bounties, change your merchanting level
+        on the <InternalLink to="/configuration">configuration page</InternalLink>. Left click to increase the count, right click to decrease the count.
+      </Paragraph>
+      <Paragraph className="mb-2 dark:text-zinc-300">
+        {" "}
+        Not all bounties have been discovered yet, so higher level ones may be missing. Please help contribute by providing details about these bounties in our{" "}
+        <ExternalLink to="https://discord.gg/fcSYv9GPwJ">Discord</ExternalLink>, and we will get them added.
       </Paragraph>
       <button
         className={`text-blue-600 dark:text-blue-500 hover:underline font-medium text-sm mb-3 ${selectedBountiesCount === 0 ? "invisible" : ""}`}
